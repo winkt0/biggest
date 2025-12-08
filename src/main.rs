@@ -37,7 +37,7 @@ fn find_biggest_programs(current_path: &str, found: &mut BTreeSet<ProgramFolder>
     {
         {
             let folder = ProgramFolder {
-                size: current_size,
+                bytes: current_size,
                 path: current_path.into(),
             };
             found.insert(folder);
@@ -59,16 +59,16 @@ fn find_biggest_programs(current_path: &str, found: &mut BTreeSet<ProgramFolder>
 
 #[derive(Eq)]
 struct ProgramFolder {
-    size: u64,
+    bytes: u64,
     path: String,
 }
 
 impl Ord for ProgramFolder {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        if self.size > other.size {
+        if self.bytes > other.bytes {
             return std::cmp::Ordering::Greater;
         }
-        if self.size < other.size {
+        if self.bytes < other.bytes {
             return std::cmp::Ordering::Less;
         }
         return std::cmp::Ordering::Equal;
@@ -77,7 +77,7 @@ impl Ord for ProgramFolder {
 
 impl PartialOrd for ProgramFolder {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        match self.size.partial_cmp(&other.size) {
+        match self.bytes.partial_cmp(&other.bytes) {
             Some(core::cmp::Ordering::Equal) => {}
             ord => return ord,
         }
@@ -87,7 +87,7 @@ impl PartialOrd for ProgramFolder {
 
 impl PartialEq for ProgramFolder {
     fn eq(&self, other: &Self) -> bool {
-        self.size == other.size && self.path == other.path
+        self.bytes == other.bytes && self.path == other.path
     }
 }
 
@@ -102,6 +102,6 @@ fn main() {
         .unwrap();
     find_biggest_programs(&path, &mut found, limit);
     for folder in found {
-        println!("{} with {} Bytes", folder.path, folder.size);
+        println!("{} with {} Bytes", folder.path, folder.bytes);
     }
 }
