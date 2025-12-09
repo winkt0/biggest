@@ -2,6 +2,13 @@
 name = "biggest"
 version = "0.1.0"
 edition = "2024"
+description = "Find out which program folders take up the most space."
+repository = "https://github.com/winkt0/biggest"
+homepage = "https://github.com/winkt0/biggest"
+license = "MIT"
+readme = "README.md"
+keywords = ["cli", "folders", "size"]
+categories = ["command-line-interface", "command-line-utilities"]
 
 [dependencies]
 clap = {version = "4.5.53", features = [ "derive" ]}
