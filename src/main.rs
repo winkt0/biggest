@@ -6,6 +6,10 @@ use std::{
     path::PathBuf,
 };
 
+mod program_folder;
+mod format;
+use crate::{program_folder::ProgramFolder, format::format_size};
+
 fn hints_at_program_directory(entry: DirEntry) -> bool {
     let name = entry.file_name().into_string().unwrap().to_uppercase();
     let folders_typically_found_in_program_directories = ["SRC", "BIN", "LOGS", ".GIT"];
@@ -55,74 +59,6 @@ fn find_biggest_programs(current_path: &str, found: &mut BTreeSet<ProgramFolder>
             find_biggest_programs(&entry_path, found, limit);
         }
     });
-}
-
-#[derive(Eq)]
-struct ProgramFolder {
-    bytes: u64,
-    path: String,
-}
-
-impl Ord for ProgramFolder {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        if self.bytes > other.bytes {
-            return std::cmp::Ordering::Greater;
-        }
-        if self.bytes < other.bytes {
-            return std::cmp::Ordering::Less;
-        }
-        return std::cmp::Ordering::Equal;
-    }
-}
-
-impl PartialOrd for ProgramFolder {
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        match self.bytes.partial_cmp(&other.bytes) {
-            Some(core::cmp::Ordering::Equal) => {}
-            ord => return ord,
-        }
-        self.path.partial_cmp(&other.path)
-    }
-}
-
-impl PartialEq for ProgramFolder {
-    fn eq(&self, other: &Self) -> bool {
-        self.bytes == other.bytes && self.path == other.path
-    }
-}
-
-struct Unit<'a> {
-    size: u64,
-    name: &'a str,
-}
-
-const GB: Unit = Unit {
-    size: 1 << 30,
-    name: "GB",
-};
-
-const MB: Unit = Unit {
-    size: 1 << 20,
-    name: "MB",
-};
-
-const KB: Unit = Unit {
-    size: 1 << 10,
-    name: "KB",
-};
-
-fn format_size(bytes: u64) -> String {
-    match [GB, MB, KB].iter().find(|unit| bytes > unit.size) {
-        Some(unit) => {
-            let num_units = bytes / unit.size;
-            return num_units.to_string()
-                + " "
-                + &unit.name
-                + " "
-                + &format_size(bytes - num_units * unit.size);
-        }
-        None => return bytes.to_string() + " bytes",
-    };
 }
 
 fn main() {
