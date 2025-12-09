@@ -5,6 +5,7 @@ use std::{
     fs::{self, DirEntry, ReadDir},
     path::PathBuf,
 };
+use clap::Parser;
 
 mod program_folder;
 mod format;
@@ -61,9 +62,18 @@ fn find_biggest_programs(current_path: &str, found: &mut BTreeSet<ProgramFolder>
     });
 }
 
+#[derive(Parser, Debug)]
+#[command(author, version, about)]
+struct Args {
+    /// Only capture the biggest <LIMIT> folders. 
+    #[arg(long)]
+    limit: Option<usize>,
+}
+
 fn main() {
-    let limit = 20;
     let mut found = BTreeSet::<ProgramFolder>::new();
+    let limit = Args::parse().limit.unwrap_or(10);
+    println!("Looking for the {} biggest program folders...", limit);
     let path = PathBuf::from("./")
         .canonicalize()
         .unwrap()
