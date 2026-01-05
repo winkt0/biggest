@@ -5,7 +5,7 @@ use std::{
     fs::{self, DirEntry, ReadDir},
     path::PathBuf,
 };
-use clap::Parser;
+use clap::{Parser};
 
 mod program_folder;
 mod format;
@@ -62,26 +62,33 @@ fn find_biggest_programs(current_path: &str, found: &mut BTreeSet<ProgramFolder>
     });
 }
 
+const DEFAULT_PATH: &str = "./";
+
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
 struct Args {
     /// Only capture the biggest <LIMIT> folders. 
-    #[arg(long)]
-    limit: Option<usize>,
+    #[arg(long, default_value_t=10)]
+    limit: usize,
+    /// Restrict search to folders within <PATH>
+    #[arg(long, default_value_t=DEFAULT_PATH.to_string())]
+    path: String
 }
 
 fn main() {
     let mut found = BTreeSet::<ProgramFolder>::new();
-    let limit = Args::parse().limit.unwrap_or(10);
-    println!("Looking for the {} biggest program folders...", limit);
-    let path = PathBuf::from("./")
+    let parsed = Args::parse();
+    let limit = parsed.limit;
+    let path = parsed.path;
+    let path = PathBuf::from(path)
         .canonicalize()
         .unwrap()
         .into_os_string()
         .into_string()
         .unwrap();
+    println!("Looking for the {} biggest program folders within {}...", limit, path);
     find_biggest_programs(&path, &mut found, limit);
-    for folder in found {
+    for folder in found.iter().rev() {
         println!("{} with {}", folder.path, format_size(folder.bytes));
     }
 }

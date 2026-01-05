@@ -1,6 +1,6 @@
 [package]
 name = "biggest"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "Find out which program folders take up the most space."
 repository = "https://github.com/winkt0/biggest"

@@ -31,14 +31,27 @@ returns a list of the 10 biggest program folders along with their sizes found fr
 biggest --limit 20
 ```
 returns a list of the 20 biggest program folders along with their sizes found from within the current directory.
+If you don't want to search in the current directory, you can also specify the path within which to search:
+
+```bash
+biggest --path "/home"
+```
+finds the 10 biggest folders contained within ```/home```. Both arguments can also be combined:
+```bash
+biggest --path "/home" --limit 3
+```
+finds the 3 biggest folders within ```/home```.
 
 
 Output obtained by running biggest --help:
 ```bash
+Find out which program folders take up the most space.
+
 Usage: biggest [OPTIONS]
 
 Options:
-      --limit <LIMIT>  Limit the output to N lines
+      --limit <LIMIT>  Only capture the biggest <LIMIT> folders [default: 10]
+      --path <PATH>    Restrict search to folders within <PATH> [default: ./]
   -h, --help           Print help
   -V, --version        Print version
 ```
