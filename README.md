@@ -26,21 +26,21 @@ cargo install --path .
 ```bash
 biggest
 ```
-returns a list of the 10 biggest program folders along with their sizes found from within the current directory. If you wish to specify the number of results, you can do so using the optional argument ``` --limit ```:
+returns a list of the 10 biggest program folders along with their sizes found recursively from within the current directory. If you wish to specify the number of results, you can do so using the optional argument ``` --limit ```:
 ```bash
 biggest --limit 20
 ```
-returns a list of the 20 biggest program folders along with their sizes found from within the current directory.
+returns a list of the 20 biggest program folders along with their sizes found recursively from within the current directory.
 If you don't want to search in the current directory, you can also specify the path within which to search:
 
 ```bash
 biggest --path "/home"
 ```
-finds the 10 biggest folders contained within ```/home```. Both arguments can also be combined:
+finds the 10 biggest program folders contained within ```/home```. Both arguments can also be combined:
 ```bash
 biggest --path "/home" --limit 3
 ```
-finds the 3 biggest folders within ```/home```.
+finds the 3 biggest program folders within ```/home```.
 
 
 Output obtained by running biggest --help:
